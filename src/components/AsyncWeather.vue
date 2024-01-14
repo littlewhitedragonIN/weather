@@ -29,10 +29,10 @@
             </div>
             <hr class="border border-white border-opactity-10 w-full" />
             <!-- 24h details -->
-            <div class="w-full max-w-screen-md py-12">
-                <div class="mx-8 text-white overflow-x-scroll gap-10">
+            <div class="w-full max-w-screen-md  py-12">
+                <div class="mx-8 text-white">
                     <h2>Hourly Weather</h2>
-                    <div class="flex gap-8 py-6">
+                    <div class="flex gap-8 py-6  overflow-x-scroll">
                         <div v-for="hourT in temp24" class="flex flex-col items-center py-2 gap-2">
                             <p class=" whitespace-nowrap text-md">
                                 {{ formatDate(hourT.fxTime, 'HH:mm') }}
@@ -113,25 +113,21 @@ const fetchData = async () => {
     temp7d.value = daily;
 }
 const formatDate = (d, formatStr = 'YYYY-MM-DD HH:mm:ss') => dayjs(new Date(d)).format(formatStr)
-fetchData();
+await fetchData();
 
 const hasSavedBefore = () => {
     if (localStorage.getItem('savedCities')) {
         cacheCities = JSON.parse(localStorage.getItem('savedCities'));
         // find the current city whether saved in the cache
-        const indx = cacheCities.findIndex(item => item.locationID === locationID);
-        if (indx > -1) {
-            savedIndx.value = indx;
-        }
-
+        savedIndx.value = cacheCities.findIndex(item => item.locationID === locationID);
     }
 }
 hasSavedBefore();
 
 const removeCity = () => {
-
-    if (savedIndx.value > -1) {
-        cacheCities.splice(savedIndx.value, 1);
+    const index = savedIndx.value;
+    if (index > -1) {
+        cacheCities.splice(index, 1);
         localStorage.setItem('savedCities', JSON.stringify(cacheCities));
         router.push('/');
     }

@@ -4,6 +4,7 @@
             <input v-model="searchQuery" type="text" placeholder="Please input province or city"
                 class="py-2 px-1 w-full bg-transparent border-b focus:outline-none focus:border-weather-secondary focus:shadow-[0px_1px_0_0_#004E71]">
 
+            <!-- Search matched cities -->
             <ul class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]"
                 v-if="matchedList.length">
                 <p class="py-2" v-if="isSearchError">
@@ -16,11 +17,12 @@
                 </template>
             </ul>
         </div>
+        <!-- Cached city list -->
         <div class="flex flex-col gap-8">
             <Suspense>
-                <CityList/>
+                <CityList />
                 <template #fallback>
-                    <CityCardSkeleton></CityCardSkeleton>
+                    <CityCardSkeleton/>
                 </template>
             </Suspense>
         </div>
@@ -43,11 +45,7 @@ const matchedList = ref([]);
 
 
 
-const retrieveLocations = (arr) => {
-    return arr.map(item => {
-        return { ...item, desc: `${item.name} - ${item.adm1}${item.adm2}${item.country}` }
-    });
-}
+const retrieveLocations = arr => arr.map(item => ({ ...item, desc: `${item.name} - ${item.adm1}${item.adm2}${item.country}` }));
 
 const processLocationResult = (res) => {
     const { code, location } = res;
@@ -56,7 +54,6 @@ const processLocationResult = (res) => {
         return;
     }
     matchedList.value = retrieveLocations(location);
-
 }
 
 watch(searchQuery, debounce(async () => {

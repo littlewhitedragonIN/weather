@@ -31,9 +31,9 @@ const getCities = async () => {
         savedCitiesWeather.value = res.map((el, index) => ({ ...el.data.now, locationName: savedCities[index].locationName, locationID: savedCities[index].locationID }))
     }
 }
+await new Promise((resolve) => setTimeout(resolve, 300))
 
-getCities();
-await new Promise((res) => setTimeout(res, 300))
+await getCities();
 
 
 const router = useRouter();
